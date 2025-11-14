@@ -40,3 +40,11 @@ VALUES ('Dépôt Central', '12 rue des Hôpitaux, Paris');
 
 INSERT INTO produits (nom, code, quantite, depot_id)
 VALUES ('Gants stériles', 'GST-001', 50, 1);
+
+-- Table des utilisateurs pour l'authentification
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(200) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'user'
+);
