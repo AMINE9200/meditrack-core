@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "meditrack-core",
   "version": "1.0.0",
   "description": "API MediTrack Core - Gestion de dépôts hospitaliers",
