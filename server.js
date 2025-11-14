@@ -5,13 +5,16 @@ import produitRoutes from "./src/routes/produitRoutes.js";
 import depotRoutes from "./src/routes/depotRoutes.js";
 import mouvementRoutes from "./src/routes/mouvementRoutes.js";
 import zoneRoutes from "./src/routes/zoneRoutes.js";
-import "./src/config/db.js";
+import { connectDB } from "./src/config/db.js";
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// CONNECTER MONGODB
+connectDB();
 
 app.use("/produits", produitRoutes);
 app.use("/depots", depotRoutes);
