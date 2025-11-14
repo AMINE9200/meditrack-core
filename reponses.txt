@@ -1,0 +1,30 @@
+Réponses aux questions
+
+1. Qu’est-ce qu’une API REST ?
+Une API REST est un service web qui permet d’échanger des données entre un client et un serveur à l’aide de requêtes HTTP. Elle suit des règles simples : utiliser des routes claires, retourner des données en JSON, et respecter les actions CRUD (Create, Read, Update, Delete).
+
+2. À quoi sert une architecture MVC ?
+L’architecture MVC permet d’organiser le code en trois parties :
+
+Model : gère les données et la base de données
+
+View : gère l’affichage (non utilisé ici car c’est une API)
+
+Controller : contient la logique et les traitements
+Cela rend le projet plus clair, plus propre et plus facile à maintenir.
+
+3. Pourquoi utiliser un fichier .env ?
+Le fichier .env permet de stocker les informations sensibles, comme l’URL de la base de données ou le port du serveur.
+Cela évite de les mettre directement dans le code, ce qui rend l’application plus sécurisée et plus facile à configurer.
+
+4. Qu’est-ce qu’un middleware ?
+Un middleware est une fonction qui s’exécute entre la requête du client et la réponse du serveur.
+Par exemple : express.json(), cors(), ou un middleware d’authentification.
+Il sert à analyser, modifier ou vérifier les requêtes avant qu’elles arrivent aux routes.
+
+5. Quelle est la différence entre PUT et PATCH ?
+
+PUT remplace l’objet entier (toutes les données sont mises à jour).
+
+PATCH met à jour uniquement les champs qui changent.
+Dans notre projet, on utilise PUT, car on modifie toutes les informations d’un produit.
