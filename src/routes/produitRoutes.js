@@ -1,22 +1,16 @@
 import express from "express";
 import {
-  getProduits,
-  addProduit,
-  editProduit,
-  removeProduit,
+  getAllProduits,
+  createProduit,
+  updateProduit,
+  deleteProduit,
 } from "../controllers/produitController.js";
-
-import { authMiddleware } from "../middleware/authMiddleware.js";
-import { adminMiddleware } from "../middleware/adminMiddleware.js";
 
 const router = express.Router();
 
-// Public : lire les produits
-router.get("/", getProduits);
-
-// Admin : ajouter, modifier, supprimer
-router.post("/", authMiddleware, adminMiddleware, addProduit);
-router.put("/:id", authMiddleware, adminMiddleware, editProduit);
-router.delete("/:id", authMiddleware, adminMiddleware, removeProduit);
+router.get("/", getAllProduits);
+router.post("/", createProduit);
+router.put("/:id", updateProduit);
+router.delete("/:id", deleteProduit);
 
 export default router;

@@ -1,76 +1,134 @@
- Meditrack Core – Backend API
+Meditrack Core – Backend API
 
 Ce projet a été réalisé dans le cadre de l’épreuve de Conception et Développement Backend.
-L’objectif est de mettre en place une API REST simple permettant de gérer des produits médicaux (création, lecture, mise à jour, suppression).
+Il s’agit d’une API REST permettant de gérer des produits médicaux, des dépôts, des zones de stockage et des mouvements (entrées, sorties, transferts).
+Le projet respecte une architecture MVC, utilise MongoDB + PostgreSQL, et suit les bonnes pratiques de structuration backend.
 
-L’application est développée avec :
+ Fonctionnalités principales
+  API Produits (CRUD complet)
 
-Node.js
+Création / Lecture / Mise à jour / Suppression
 
-Express
+Stock géré automatiquement lors des mouvements
 
-MongoDB
+  API Dépôts
 
-Mongoose
+Création, mise à jour, suppression
 
-Elle respecte une architecture MVC et utilise des variables d’environnement pour la configuration.
+Association avec des produits et une structure de zones
+
+  API Zones (MongoDB)
+
+Structure dynamique des zones pour chaque dépôt
+
+Stock réparti par zone
+
+  API Mouvements
+
+Entrée en stock
+
+Sortie de stock
+
+Transfert entre zones
+
+  Authentification
+
+Inscription
+
+Connexion
+
+JWT sécurisé
+
+ Technologies utilisées
+Technologie	Rôle
+Node.js	Environnement d'exécution
+Express	Framework backend
+MongoDB / Mongoose	Stockage flexible pour les zones
+PostgreSQL / pg	Données relationnelles (produits, dépôts, mouvements)
+JWT	Authentification
+bcrypt	Hash des mots de passe
+dotenv	Variables d’environnement
+Nodemon	Redémarrage automatique
+ Structure du projet
+meditrack-core/
+│── server.js                 -> Point d’entrée du serveur
+│── package.json
+│── .env
+│
+└── src/
+    ├── config/
+    │     └── db.js          -> Connexions MongoDB + PostgreSQL
+    │
+    ├── controllers/         -> Logique métier
+    │     ├── authController.js
+    │     ├── depotController.js
+    │     ├── produitController.js
+    │     ├── zoneController.js
+    │     └── mouvementController.js
+    │
+    ├── models/              -> Modèles Mongoose et SQL
+    │     ├── userModel.js
+    │     ├── produitModel.js
+    │     ├── zoneModel.js
+    │     └── mouvementModel.js
+    │
+    └── routes/              -> Routes API regroupées
+          ├── authRoutes.js
+          ├── depotRoutes.js
+          ├── produitRoutes.js
+          ├── zoneRoutes.js
+          └── mouvementRoutes.js
 
  Installation
-1 Récupération du projet
+1️ Télécharger le projet
 
-Télécharger le dossier du projet fourni pendant l’épreuve.
+Récupérer le dossier fourni ou cloner depuis GitHub.
 
-2️ Installation des dépendances
-
-Depuis la racine du projet :
-
+2️ Installer les dépendances
 npm install
 
-3️ Configuration des variables d’environnement
+3️ Configurer les variables d’environnement
 
-Créer un fichier .env à la racine  :
+Créer un fichier .env :
 
 PORT=3000
+
+# MongoDB
 MONGO_URI=mongodb://localhost:27017/meditrack
 
+# PostgreSQL
+PG_HOST=localhost
+PG_PORT=5432
+PG_USER=postgres
+PG_PASSWORD=motdepasse
+PG_DATABASE=meditrack
+
+# Tokens
+JWT_SECRET=secret123
+
 4️ Lancer le serveur
-
-Mode développement :
-
 npm run dev
 
 
 Le serveur démarre sur :
+ http://localhost:3000/
 
-http://localhost:3000/
-
- Structure du projet
-meditrack-core/
-│── src/
-│   ├── config/
-│   │     └── db.js              -> Connexion MongoDB
-│   ├── controllers/             -> Logique métier
-│   ├── models/                  -> Schémas Mongoose
-│   └── routes/                  -> Définition des routes API
-│
-├── server.js                    -> Point d’entrée du serveur
-├── package.json
-├── .env.example
-└── README.md
-
- Dépendances principales
-Package	Rôle
-express	Framework backend
-mongoose	Gestion de MongoDB
-dotenv	Variables d’environnement
-cors	Gestion des accès externes
-nodemon	Redémarrage automatique
- Routes de l’API
- Créer un produit
+ Routes API
+ Authentification
+Méthode	Route	Description
+POST	/auth/register	Créer un utilisateur
+POST	/auth/login	Se connecter
+ Dépôts
+Méthode	Route
+GET	/depots
+POST	/depots
+PUT	/depots/:id
+DELETE	/depots/:id
+ Produits
+Créer un produit
 
 POST /produits
-
-Body JSON :
+Body :
 
 {
   "nom": "Seringue",
@@ -79,40 +137,53 @@ Body JSON :
   "depot_id": 1
 }
 
- Obtenir tous les produits
+Obtenir tous les produits
 
 GET /produits
 
- Mettre à jour un produit
+Mettre à jour un produit
 
 PUT /produits/:id
 
- Supprimer un produit
+Supprimer un produit
 
 DELETE /produits/:id
 
+ Zones (MongoDB)
+Méthode	Route
+GET	/zones/:depot_id
+POST	/zones/:depot_id
+PUT	/zones/:depot_id
+ Mouvements
+Action	Route
+Entrée	POST /mouvements/entree
+Sortie	POST /mouvements/sortie
+Transfert	POST /mouvements/transfert
  Objectifs pédagogiques validés
 
-Mise en place d’une architecture MVC
-
-Création d’un backend REST fonctionnel
-
-Manipulation d’une base MongoDB
-
-Utilisation de Git avec commits réguliers
-
-Tests via Thunder Client ou Postman
-
-Gestion des variables d’environnement
-
-Organisation du code selon les bonnes pratiques
+- Mise en place d’une architecture MVC
+- Création d'une API REST fonctionnelle
+- Manipulation MongoDB + PostgreSQL
+- Authentification sécurisée
+- Tests via Thunder Client / Postman
+- Usage de Git + commits structurés
+- Gestion rigoureuse des variables d’environnement
+- Organisation du code propre, claire et extensible
 
  Tests API
 
-L’ensemble des routes a été testé avec Thunder Client (VS Code).
-Chaque action (POST, GET, PUT, DELETE) a été vérifiée, avec des réponses JSON cohérentes.
+Toutes les routes ont été testées avec :
+
+Thunder Client (VS Code)
+
+Postman
+
+Chaque action (POST, GET, PUT, DELETE, transfert, entrée, sortie) fonctionne avec des réponses JSON cohérentes et des mises à jour automatiques du stock.
 
  Notes
 
-Le projet a été développé dans un environnement local, sans hébergement externe.
-Il est conçu pour être simple, lisible, et facilement extensible.
+Projet développé entièrement en local.
+
+Architecture pensée pour être lisible, évolutive et maintenable.
+
+Peut être déployé facilement sur Render, Railway, ou autres.

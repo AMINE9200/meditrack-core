@@ -1,24 +1,15 @@
-import mongoose from "mongoose";
+import { pgPool } from "../config/db.js";
 
-const mouvementSchema = new mongoose.Schema({
-  type: {
-    type: String,
-    enum: ["IN", "OUT"],
-    required: true,
-  },
-  quantite: {
-    type: Number,
-    required: true,
-  },
-  produit_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Produit",
-    required: true,
-  }
-}, {
-  timestamps: true
-});
+export const getAllMouvements = async () => {
+  const result = await pgPool.query("SELECT * FROM mouvements");
+  return result.rows;
+};
 
-const Mouvement = mongoose.model("Mouvement", mouvementSchema);
+export const createMouvement = async ({ type, quantite, produit_id }) => {
+  const result = await pgPool.query(
+    "INSERT INTO mouvements (type, quantite, produit_id) VALUES ($1, $2, $3) RETURNING *",
+    [type, quantite, produit_id]
+  );
 
-export default Mouvement;
+  return result.rows[0];
+};

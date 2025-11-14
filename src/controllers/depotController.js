@@ -1,51 +1,43 @@
-import Depot from "../models/depotModel.js";
+import { pgPool } from "../config/db.js";
+import Zone from "../models/zoneModel.js";
 
-// GET /depots/:id/zones
 export const getDepot = async (req, res) => {
-  try {
-    const depot = await Depot.findOne({ depotId: req.params.id });
+  const depotId = req.params.id;
 
-    if (!depot) {
-      return res.status(404).json({ message: "Depot not found" });
-    }
+  const depot = await pgPool.query("SELECT * FROM depots WHERE id = $1", [
+    depotId,
+  ]);
 
-    res.status(200).json({ status: "success", data: depot });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  if (depot.rows.length === 0) {
+    return res.status(404).json({ message: "Dépôt introuvable" });
   }
+
+  const zone = await Zone.findOne({ depot_id: depotId });
+
+  res.json({
+    depot: depot.rows[0],
+    zones: zone || {},
+  });
 };
 
-// POST /depots/:id/zones
 export const createDepotStructure = async (req, res) => {
-  try {
-    const { zones } = req.body;
+  const { id } = req.params;
+  const { zones } = req.body;
 
-    const newDepot = await Depot.create({
-      depotId: req.params.id,
-      zones: zones || [],
-    });
+  const created = await Zone.create({
+    depot_id: id,
+    zones,
+  });
 
-    res.status(201).json({ status: "success", data: newDepot });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  res.status(201).json(created);
 };
 
-// PUT /depots/:id/zones
 export const updateDepotStructure = async (req, res) => {
-  try {
-    const updated = await Depot.findOneAndUpdate(
-      { depotId: req.params.id },
-      { zones: req.body.zones },
-      { new: true }
-    );
+  const updated = await Zone.findOneAndUpdate(
+    { depot_id: req.params.id },
+    req.body,
+    { new: true }
+  );
 
-    if (!updated) {
-      return res.status(404).json({ message: "Depot not found" });
-    }
-
-    res.status(200).json({ status: "success", data: updated });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+  res.json(updated);
 };

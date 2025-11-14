@@ -1,14 +1,15 @@
+// src/routes/zoneRoutes.js
 import express from "express";
 import {
-  getZonesByDepot,
-  createZonesForDepot,
-  updateZonesForDepot
+  getZones,
+  createZones,
+  updateZones
 } from "../controllers/zoneController.js";
 
 const router = express.Router();
 
-router.get("/:id/zones", getZonesByDepot);
-router.post("/:id/zones", createZonesForDepot);
-router.put("/:id/zones", updateZonesForDepot);
+router.get("/:id", getZones);       // récupérer les zones d’un dépôt
+router.post("/:id", createZones);   // créer une zone dans un dépôt
+router.put("/:id", updateZones);    // mettre à jour une zone
 
 export default router;

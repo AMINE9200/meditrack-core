@@ -1,41 +1,24 @@
 import Produit from "../models/produitModel.js";
 
-export const getProduits = async (req, res) => {
-  try {
-    const produits = await Produit.find();
-    res.status(200).json({ status: "success", data: produits });
-  } catch (err) {
-    res.status(500).json({ status: "error", message: err.message });
-  }
+export const getAllProduits = async (req, res) => {
+  const produits = await Produit.find();
+  res.json(produits);
 };
 
-export const addProduit = async (req, res) => {
-  try {
-    const newProduit = await Produit.create(req.body);
-    res.status(201).json({ status: "success", data: newProduit });
-  } catch (err) {
-    res.status(500).json({ status: "error", message: err.message });
-  }
+export const createProduit = async (req, res) => {
+  const newProduit = new Produit(req.body);
+  await newProduit.save();
+  res.status(201).json(newProduit);
 };
 
-export const editProduit = async (req, res) => {
-  try {
-    const updatedProduit = await Produit.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.status(200).json({ status: "success", data: updatedProduit });
-  } catch (err) {
-    res.status(500).json({ status: "error", message: err.message });
-  }
+export const updateProduit = async (req, res) => {
+  const updated = await Produit.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
+  res.json(updated);
 };
 
-export const removeProduit = async (req, res) => {
-  try {
-    await Produit.findByIdAndDelete(req.params.id);
-    res.status(200).json({ status: "success", message: "Produit supprimé" });
-  } catch (err) {
-    res.status(500).json({ status: "error", message: err.message });
-  }
+export const deleteProduit = async (req, res) => {
+  await Produit.findByIdAndDelete(req.params.id);
+  res.json({ message: "Produit supprimé" });
 };
