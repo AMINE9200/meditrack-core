@@ -6,7 +6,7 @@ dotenv.config();
 
 const { Pool } = pkg;
 
-// 🔵 PostgreSQL
+// PostgreSQL
 export const pgPool = new Pool({
   host: process.env.PG_HOST,
   port: process.env.PG_PORT,
@@ -15,18 +15,13 @@ export const pgPool = new Pool({
   database: process.env.PG_DATABASE,
 });
 
-// Test de connexion PostgreSQL
-pgPool
-  .connect()
-  .then(() => {
-    console.log("PostgreSQL connected");
-  })
-  .catch((err) => {
-    console.error("PostgreSQL connection error:", err.message);
-  });
-
-// 🟢 MongoDB
+// MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB error:", err));
+
+// Test PostgreSQL connection
+pgPool.connect()
+  .then(() => console.log("PostgreSQL connected"))
+  .catch((err) => console.error("PostgreSQL connection error:", err));

@@ -1,4 +1,4 @@
-import pool from "../config/db.js";
+import { pgPool } from "../config/db.js";
 
 export const createUser = async (username, hashedPassword, role = "user") => {
   const query = `
@@ -7,12 +7,12 @@ export const createUser = async (username, hashedPassword, role = "user") => {
     RETURNING id, username, role;
   `;
   const values = [username, hashedPassword, role];
-  const result = await pool.query(query, values);
+  const result = await pgPool.query(query, values);
   return result.rows[0];
 };
 
 export const findUserByUsername = async (username) => {
   const query = `SELECT * FROM users WHERE username = $1`;
-  const result = await pool.query(query, [username]);
+  const result = await pgPool.query(query, [username]);
   return result.rows[0];
 };
